@@ -9,10 +9,26 @@ namespace carsData
 {
     public class CarsService
     {
+        //public static void OpenSqlConnection()
+        //{
+        //    string connectionString = GetConnectionString();
+        //    using (SqlConnection con = new SqlConnection(connectionString))
+        //    {
+        //        con.Open();
+        //    }
+        //}
+
+        //static private string GetConnectionString()
+        //{
+        //    return "Server=den1.mssql5.gear.host;Database=carstest;User Id=carstest;Password=Hy19Ks!-Kom3";
+        //}
+
+        //  ====== Get All ====== //
         public List<Car> GetAllCars()
         {
             using (SqlConnection con = new SqlConnection("Server=den1.mssql5.gear.host;Database=carstest;User Id=carstest;Password=Hy19Ks!-Kom3"))
             {
+                //OpenSqlConnection();
                 con.Open();
                 SqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "cars_getAll";
@@ -36,6 +52,10 @@ namespace carsData
                 }
             }
         }
+        // ======== Get By id =========//
+        // ======== Update ===========//
+        // ========= Create =========//
+        // ======== Delete ===========//
     }
 }
 /*

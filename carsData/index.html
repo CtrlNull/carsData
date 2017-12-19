@@ -53,6 +53,13 @@
                 function _error(error) {
                     console.error(error)
                 }
+                // Button 
+                function _btnDelete(index) {
+                    var data = vm.item[index];
+                    console.log(data.id);
+                    carService.delete(data.id)
+                        .then(_success, _error);
+                }
             }
         })();
     </script>

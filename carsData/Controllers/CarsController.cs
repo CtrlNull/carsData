@@ -19,11 +19,7 @@ namespace carsData.Controllers
             return carService.GetAllCars();
         }
         // {{Get by Id }}
-        [HttpGet, Route("getById")]
-        public Car GetById(int id)
-        {
-            return CarsService.GetById(id);
-        }
+
         // {{ Create }}
 
         // {{ Update }}
