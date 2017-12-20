@@ -19,10 +19,27 @@ namespace carsData.Controllers
             return carService.GetAllCars();
         }
         // {{Get by Id }}
-
+        [HttpGet, Route("getbyid")]
+        public List<Car> GetByIdCars(int Id)
+        {
+            CarsService carsService = new CarsService();
+            return carsService.GetByIdCars();
+        }
         // {{ Create }}
+        [HttpPost, Route("create")]
+        public List<CarCreate> CarCreate()
+        {
+            CarsService carsService = new CarsService();
+            return carsService.CarCreate();
 
+        }
         // {{ Update }}
+        [HttpPost, Route("update")]
+        public List<CarUpdate> CarUpdate()
+        {
+            CarsService carsService =  new CarsService();
+            return carsService.CarUpdate();
+        }
 
         // {{ Delete }}
 

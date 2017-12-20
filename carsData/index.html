@@ -7,13 +7,32 @@
 <body ng-app="DemoCrud">
 
     <div ng-controller="DemoController as vm">
+        <div ng-repeat="Mod in cm.Mod track by $index">
+            <div>
+                <label>Current Car</label>
+            </div>
+            <div>
+                <input type="text" placeholder="{{Mod.Make}}" />
+            </div>
+            <div>
+                <input type="text" placeholder="{{Mod.Model}}" />
+            </div>
+            <div>
+                <input type="text" placeholder="{{Mod.Year}}" />
+            </div>
+            <div>
+                <input type="text" placeholder="{{Mod.Color}}" />
+            </div>
+            <button type="button" class="btn btn-danger" ng-click="vm.btnSubmit($index)">Submit</button>
+        </div>
+
         <table>
-            <tr ng-repeat="car in vm.car">
+            <tr ng-repeat="car in vm.car track by $index">
                 <td>Car Make: {{car.Make}}</td>
                 <td>Car Model: {{car.Model}}</td>
                 <td>Car Year: {{car.Year}}</td>
                 <td>Car Color: {{car.Color}}</td>
-                <td><button class="btn btn-primary">Modify</button></td>
+                <td><button class="btn btn-primary" ng-click="vm.btnModify($index)">Modify</button></td>
                 <td><button class="btn btn-danger" ng-click="vm.btnDelete($index)" >Delete</button></td>
             </tr>
         </table>
@@ -37,7 +56,9 @@
                 vm.items = null;
                 vm.items = [];
                 // Buttons
+                vm.btnModify = _btnModify;
                 vm.btnDelete = _btnDelete;
+                vm.btnSubmit = _btnSubmit;
 
                 $http({
                     url: '/api/cars/getall',
@@ -45,24 +66,39 @@
 
                 })
                     .then(_success, _error);
+                //====== Button =======//
+
+                //~~~Modify
+                function _btnModify(index) {
+                    console.log("btn Modify");
+                    var data = vm.item[index];
+                    $Scope.Mod = data;
+                }
+
+                //~~~Delete 
+                function _btnDelete(index) {
+                    console.log("Delete");
+                    var data = vm.items[index];
+                    console.log(data.Id);
+                    //carService.delete(data.Id)
+                    //    .then(_success, _error);
+                }
+                //~~~Submit
+                function _btnSubmit() {
+
+                }
+
                 // ++++ Success ++++
                 function _success(response) {
                     vm.car = response.data;
+                    vm.items = response.data;
                 }
                 // ++++ Error ++++
                 function _error(error) {
                     console.error(error)
                 }
-                // Button 
-                function _btnDelete(index) {
-                    var data = vm.item[index];
-                    console.log(data.id);
-                    carService.delete(data.id)
-                        .then(_success, _error);
-                }
             }
         })();
     </script>
-
 </body>
 </html>
