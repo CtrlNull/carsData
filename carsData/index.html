@@ -7,25 +7,6 @@
 <body ng-app="DemoCrud">
 
     <div ng-controller="DemoController as vm">
-        <div ng-repeat="Mod in cm.Mod track by $index">
-            <div>
-                <label>Current Car</label>
-            </div>
-            <div>
-                <input type="text" placeholder="{{Mod.Make}}" />
-            </div>
-            <div>
-                <input type="text" placeholder="{{Mod.Model}}" />
-            </div>
-            <div>
-                <input type="text" placeholder="{{Mod.Year}}" />
-            </div>
-            <div>
-                <input type="text" placeholder="{{Mod.Color}}" />
-            </div>
-            <button type="button" class="btn btn-danger" ng-click="vm.btnSubmit($index)">Submit</button>
-        </div>
-
         <table>
             <tr ng-repeat="car in vm.car track by $index">
                 <td>Car Make: {{car.Make}}</td>
@@ -36,6 +17,26 @@
                 <td><button class="btn btn-danger" ng-click="vm.btnDelete($index)" >Delete</button></td>
             </tr>
         </table>
+        <div>
+            <div>
+                <label>Current Car</label>
+            </div>
+            <div>
+                <input type="text" value="{{modMake}}"  />
+            </div>
+            <div>
+                <input type="text" ng-model="$scope.modModel" />
+            </div>
+            <div>
+                <input type="text" value="{{modYear}}" />
+            </div>
+            <div>
+                <input type="text" value="{{modColor}}" />
+            </div>
+            <button type="button" class="btn btn-danger" ng-click="vm.btnSubmit()">Submit</button>
+        </div>
+
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -49,8 +50,8 @@
 
             angular.module('DemoCrud')
                 .controller('DemoController', DemoController);
-            DemoController.$inject = ['$http'];
-            function DemoController($http) {
+            DemoController.$inject = ['$http', '$scope'];
+            function DemoController($http, $scope) {
                 var vm = this;
                 // Items placeholder
                 vm.items = null;
@@ -71,8 +72,15 @@
                 //~~~Modify
                 function _btnModify(index) {
                     console.log("btn Modify");
-                    var data = vm.item[index];
-                    $Scope.Mod = data;
+                    var data = vm.items[index];
+                    console.log(data);
+                    vm.data = data;
+                    $scope.modId = data.Id;
+                    console.log(data.Id);
+                    $scope.modMake = data.Make;
+                    $scope.modModel = data.Model;
+                    $scope.modYear = data.Year;
+                    $scope.modColor = data.Color;
                 }
 
                 //~~~Delete 
@@ -85,6 +93,15 @@
                 }
                 //~~~Submit
                 function _btnSubmit() {
+                    var modMake = $scope.modMake;
+                    var updatedItems = {
+                        Id: $scope.modId
+                        , Make: modMake
+                        , Model: $scope.modModel
+                        , Year: $scope.modYear
+                        , Color: $scope.modColor
+                    };
+                    console.log(updatedItems);
 
                 }
 
