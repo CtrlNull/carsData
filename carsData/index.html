@@ -22,18 +22,19 @@
                 <label>Current Car</label>
             </div>
             <div>
-                <input type="text" value="{{modMake}}"  />
+                <input type="text" value="{{vm.currentCar.Make}}"  />
             </div>
             <div>
-                <input type="text" ng-model="$scope.modModel" />
+                <input type="text" ng-model="vm.currentCar.Model" />
             </div>
             <div>
-                <input type="text" value="{{modYear}}" />
+                <input type="text" value="{{vm.currentCar.Year}}" />
             </div>
             <div>
-                <input type="text" value="{{modColor}}" />
+                <input type="text" value="{{vm.currentCar.Color}}" />
             </div>
-            <button type="button" class="btn btn-danger" ng-click="vm.btnSubmit()">Submit</button>
+            <button type="button" class="btn btn-primary" ng-click="vm.btnUpdate()">Update</button>
+            <button type="button" class="btn btn-danger" ng-click="vm.btnCreate()">Create</button>
         </div>
 
 
@@ -59,7 +60,8 @@
                 // Buttons
                 vm.btnModify = _btnModify;
                 vm.btnDelete = _btnDelete;
-                vm.btnSubmit = _btnSubmit;
+                vm.btnUpdate = _btnUpdate;
+                vm.btnCreate = _btnCreate;
 
                 $http({
                     url: '/api/cars/getall',
@@ -72,15 +74,7 @@
                 //~~~Modify
                 function _btnModify(index) {
                     console.log("btn Modify");
-                    var data = vm.items[index];
-                    console.log(data);
-                    vm.data = data;
-                    $scope.modId = data.Id;
-                    console.log(data.Id);
-                    $scope.modMake = data.Make;
-                    $scope.modModel = data.Model;
-                    $scope.modYear = data.Year;
-                    $scope.modColor = data.Color;
+                    vm.currentCar = Object.assign({}, vm.items[index]);
                 }
 
                 //~~~Delete 
@@ -88,31 +82,52 @@
                     console.log("Delete");
                     var data = vm.items[index];
                     console.log(data.Id);
-                    //carService.delete(data.Id)
-                    //    .then(_success, _error);
+                    $http({
+                        url: '/api/cars/delete',
+                        method: 'DELETE'
+                    })
+                        .then(_success, _error);
+
                 }
                 //~~~Submit
-                function _btnSubmit() {
-                    var modMake = $scope.modMake;
-                    var updatedItems = {
-                        Id: $scope.modId
-                        , Make: modMake
-                        , Model: $scope.modModel
-                        , Year: $scope.modYear
-                        , Color: $scope.modColor
-                    };
-                    console.log(updatedItems);
-
+                function _btnUpdate() {
+                    console.log(vm.currentCar);
+                    $http({
+                        url: '/api/cars/create',
+                        method: 'POST'
+                    })
+                        .then(_postSuccess, _postError);
                 }
-
+                //~~~Create
+                function _btnCreate() {
+                    console.log(vm.currentCar);
+                    $http({
+                        url: '/api/cars/create',
+                        method: 'PUT'
+                    })
+                        .then(_postSuccess, _postError);
+                }
                 // ++++ Success ++++
+                // get
                 function _success(response) {
+                    console.log(response);
+                    console.log("success response");
                     vm.car = response.data;
                     vm.items = response.data;
                 }
+                // Post 
+                function _postSuccess(response) {
+                    console.log(response.data);
+                    conosole.log(" POST success");
+                }
                 // ++++ Error ++++
+                // get
                 function _error(error) {
                     console.error(error)
+                }
+                // POST - Error
+                function _postError(error) {
+                    console.log(error)
                 }
             }
         })();

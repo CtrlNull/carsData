@@ -35,13 +35,18 @@ namespace carsData.Controllers
         }
         // {{ Update }}
         [HttpPost, Route("update")]
-        public List<CarUpdate> CarUpdate()
+        public List<CarUpdate> CarUpdate(int Id)
         {
-            CarsService carsService =  new CarsService();
-            return carsService.CarUpdate();
+            CarsService carsService = new CarsService();
+            return carsService.CarUpdate(Id);
         }
 
         // {{ Delete }}
-
+        [HttpDelete, Route("delete")]
+        public List<CarDelete> CarDelete(int Id)
+        {
+            CarsService carsService = new CarsService();
+            return carsService.CarDelete();
+        }
     }
 }

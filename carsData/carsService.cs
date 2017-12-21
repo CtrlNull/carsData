@@ -9,20 +9,6 @@ namespace carsData
 {
     public class CarsService
     {
-        //public static void OpenSqlConnection()
-        //{
-        //    string connectionString = GetConnectionString();
-        //    using (SqlConnection con = new SqlConnection(connectionString))
-        //    {
-        //        con.Open();
-        //    }
-        //}
-
-        //static private string GetConnectionString()
-        //{
-        //    return "Server=den1.mssql5.gear.host;Database=carstest;User Id=carstest;Password=Hy19Ks!-Kom3";
-        //}
-
         //  ====== Get All ====== //
         public List<Car> GetAllCars()
         {
@@ -82,17 +68,41 @@ namespace carsData
             }
         }
         // ======== Update ===========//
-        public List<CarUpdate> CarUpdate()
+        public void CarUpdate(CarUpdate request)
         {
-            return null;
+            using (SqlConnection con = new SqlConnection("Server=den1.mssql5.gear.host;Database=carstest;User Id=carstest;Password=Hy19Ks!-Kom3"))
+            {
+                con.Open();
+                SqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = "cars_update";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Id", request.Id);
+                cmd.Parameters.AddWithValue("@Make", request.Make);
+                cmd.Parameters.AddWithValue("@Model", request.Model);
+                cmd.Parameters.AddWithValue("@Year", request.Year);
+                cmd.Parameters.AddWithValue("@Color", request.Color);
+                cmd.ExecuteNonQuery();
+            }
         }
         // ========= Create =========//
-        public List<CarCreate> CarCreate()
+        public int CarCreate(CarCreate request)
         {
-            return null;
+            using (SqlConnection con = new SqlConnection("Server=den1.mssql5.gear.host;Database=carstest;User Id=carstest;Password=Hy19Ks!-Kom3"))
+            {
+                con.Open();
+                SqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = "cars_create";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Make", request.Make);
+                cmd.Parameters.AddWithValue("@Model", request.Model);
+                cmd.Parameters.AddWithValue("@Year", request.Year);
+                cmd.Parameters.AddWithValue("@Color", request.Color);
+                cmd.ExecuteNonQuery();
+            }
+            return 0;
         }
         // ======== Delete ===========//
-        public void Delete(int Id)
+        public void CarDelete(int Id)
         {
             using (SqlConnection con = new SqlConnection("Server=den1.mssql5.gear.host;Database=carstest;User Id=carstest;Password=Hy19Ks!-Kom3"))
             {
@@ -102,7 +112,6 @@ namespace carsData
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Id", Id);
                 cmd.ExecuteNonQuery();
-              
             }
         }
     }
