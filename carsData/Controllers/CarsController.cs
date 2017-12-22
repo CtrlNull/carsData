@@ -12,41 +12,58 @@ namespace carsData.Controllers
     public class CarsController : ApiController
     {
         // {{ Get All }}
-        [HttpGet, Route("getall")]
+        [Route("getall"), HttpGet]
         public List<Car> GetAllCars()
         {
             CarsService carService = new CarsService();
             return carService.GetAllCars();
         }
-        // {{Get by Id }}
-        [HttpGet, Route("getbyid")]
-        public List<Car> GetByIdCars(int Id)
-        {
-            CarsService carsService = new CarsService();
-            return carsService.GetByIdCars();
-        }
         // {{ Create }}
-        [HttpPost, Route("create")]
-        public List<CarCreate> CarCreate()
+        [Route, HttpPost]
+        public HttpResponseMessage CarCreate(CarCreate request)
         {
             CarsService carsService = new CarsService();
-            return carsService.CarCreate();
+            if (request == null)
+                ModelState.AddModelError("", "missing model");
 
+            if (!ModelState.IsValid)
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+
+            var id = carsService.CarCreate(request);
+            return Request.CreateResponse(HttpStatusCode.Created, id);
         }
         // {{ Update }}
-        [HttpPost, Route("update")]
-        public List<CarUpdate> CarUpdate(int Id)
+        [Route("{Id:int}"), HttpPut]
+        public HttpResponseMessage CarUpdate(int Id, CarUpdate updateRequest)
         {
             CarsService carsService = new CarsService();
-            return carsService.CarUpdate(Id);
+            if (updateRequest == null)
+                ModelState.AddModelError("", "missing model");
+            else if (Id != updateRequest.Id)
+                ModelState.AddModelError("Id", "id does not match URL");
+
+            if (!ModelState.IsValid)
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+
+            carsService.CarUpdate(updateRequest);
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         // {{ Delete }}
-        [HttpDelete, Route("delete")]
-        public List<CarDelete> CarDelete(int Id)
+        [Route("{Id:int}"), HttpDelete]
+        public HttpResponseMessage CarDelete(int Id)
         {
             CarsService carsService = new CarsService();
-            return carsService.CarDelete();
+            carsService.CarDelete(Id);
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
+        //// {{Get by Id }}
+        //[HttpGet, Route("GetByIdCars")]
+        //public List<Car> GetByIdCars(int Id)
+        //{
+        //    var car = new CarsService.GetByIdCars(Id);
+        //    return carsService.GetByIdCars();
+        //}
+
     }
 }

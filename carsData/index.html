@@ -22,16 +22,24 @@
                 <label>Current Car</label>
             </div>
             <div>
-                <input type="text" value="{{vm.currentCar.Make}}"  />
+                <label>Id</label>
+                <input type="text" ng-model="vm.currentCar.Id" />
             </div>
             <div>
+                <label>Make</label>
+                <input type="text" ng-model="vm.currentCar.Make"  />
+            </div>
+            <div>
+                <label>Model</label>
                 <input type="text" ng-model="vm.currentCar.Model" />
             </div>
             <div>
-                <input type="text" value="{{vm.currentCar.Year}}" />
+                <label>Year</label>
+                <input type="text" ng-model="vm.currentCar.Year" />
             </div>
             <div>
-                <input type="text" value="{{vm.currentCar.Color}}" />
+                <label>Color</label>
+                <input type="text" ng-model="vm.currentCar.Color" />
             </div>
             <button type="button" class="btn btn-primary" ng-click="vm.btnUpdate()">Update</button>
             <button type="button" class="btn btn-danger" ng-click="vm.btnCreate()">Create</button>
@@ -83,27 +91,32 @@
                     var data = vm.items[index];
                     console.log(data.Id);
                     $http({
-                        url: '/api/cars/delete',
-                        method: 'DELETE'
+                        url: '/api/cars/' + data.Id
+                        , method: 'DELETE'
                     })
                         .then(_success, _error);
 
                 }
                 //~~~Submit
                 function _btnUpdate() {
-                    console.log(vm.currentCar);
+
+                    var createData = Object.assign({}, vm.currentCar);
+                    console.log(createData);
                     $http({
-                        url: '/api/cars/create',
-                        method: 'POST'
+                        url: '/api/cars/' + createData.Id,
+                        method: 'PUT',
+                        data: JSON.stringify(createData)
                     })
                         .then(_postSuccess, _postError);
                 }
                 //~~~Create
                 function _btnCreate() {
-                    console.log(vm.currentCar);
+                    var createData = Object.assign({}, vm.currentCar);
+                    console.log(createData);
                     $http({
-                        url: '/api/cars/create',
-                        method: 'PUT'
+                        url: '/api/cars/',
+                        method: 'POST',
+                        data: JSON.stringify(createData)
                     })
                         .then(_postSuccess, _postError);
                 }
@@ -118,7 +131,7 @@
                 // Post 
                 function _postSuccess(response) {
                     console.log(response.data);
-                    conosole.log(" POST success");
+                    console.log(" POST success");
                 }
                 // ++++ Error ++++
                 // get
