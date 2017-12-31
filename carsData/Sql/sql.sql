@@ -22,4 +22,13 @@
 -- Select * From auth_user;
 
 -- ================================
-
+-- Creating Procedures --
+-- Create Proc auth_GetAll
+-- AS
+-- Select Id, UserName, UserEmail, UserPassword
+-- From auth_user;
+-- Create Proc auth_Update
+-- AS
+-- Select Id, UserName, UserEmail, UserPassword
+-- From auth_user;
+--=================================
