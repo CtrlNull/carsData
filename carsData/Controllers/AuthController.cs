@@ -17,7 +17,6 @@ namespace carsData.Controllers
             public string UserName {get; set;}
             public string Password {get; set;}
         }
-
         [Route("login"), HttpPost]
         public HttpReponseMessage Login(LoginRequest req)
         {
@@ -56,8 +55,5 @@ namespace carsData.Controllers
             HttpContext.Current.Response.AddHeader("X-Congrats", "You're in!");
             reutn User.Identity.Name;
         }
-
-
-
     }
 }
