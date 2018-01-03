@@ -26,13 +26,35 @@ namespace carsData.Controllers
 
             if (userId.HasValue)
             {
-                formsAuthentication.SetAuthCookie(userId.ToString(), createPersistentCooke: true);
+                FormsAuthentication.SetAuthCookie(userId.ToString(), createPersistentCookie: true);
                 return Request.CreateResponse(HttpStatusCode.OK,($"user with id {userId} has logged in"));
             }
             else
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Invalid login");
             }
+        }
+        [Route("newUser"), HttpPost]
+        public HttpReponseMessage Create(loginRequest req)
+        {
+            var authService = new AuthService();
+            var Id = authService.CreateUser(req.UserName, req.Password);
+
+            if (Id.HasValue)
+            {
+                FormsAuthentication.SetAuthCookie(Id.ToString(), createPersistentCookie: true);
+                return Request.CreateResponse(HttpStatusCode.OK, ($"user with the id {Id} has logged in"));
+            }
+            else
+            {
+                return Request.CreateErrorReponse(HttpStatusCode.BadRequest, "Invalid login");
+            }
+        }
+        [Route("test"), HttpGet, Authorize]
+        public Object ShowId()
+        {
+            HttpContext.Current.Response.AddHeader("X-Congrats", "You're in!");
+            reutn User.Identity.Name;
         }
 
 
